@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nikola, mam do Ciebie pytanie... 💜</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2e1065, #3b0764, #581c87);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 440px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+            color: #f472b6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .hearts-bg {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            position: relative;
+            height: 70px;
+            width: 100%;
+        }
+
+        button {
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+
+        #yesBtn {
+            background-color: #a855f7;
+            color: white;
+            z-index: 5;
+        }
+
+        #yesBtn:active {
+            transform: scale(0.95);
+        }
+
+        #noBtn {
+            background-color: #4c1d95;
+            color: #ddd;
+            position: absolute;
+            z-index: 20;
+            transition: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .options-container {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            border: 2px solid transparent;
+        }
+
+        .option-card:has(input:checked) {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #c084fc;
+        }
+
+        input[type="radio"] {
+            accent-color: #c084fc;
+            transform: scale(1.2);
+        }
+
+        .submit-btn {
+            background-color: #ec4899;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .words-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.85rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .words-grid span {
+            padding: 2px 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Styl licznika */
+        .countdown-container {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .heart-fall {
+            position: fixed;
+            top: -10vh;
+            color: rgba(236, 72, 153, 0.6);
+            font-size: 1.2rem;
+            animation: fall linear forwards;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Krok 1: Pytanie -->
+    <div class="container" id="step1">
+        <div class="hearts-bg">💜✨🔮</div>
+        <h1>Nikola, pójdziesz ze mną na randkę?</h1>
+        <p>Mam kilka świetnych pomysłów, ale najpierw musisz się zgodzić! 😉</p>
+        
+        <div class="btn-container">
+            <button id="yesBtn">TAK!</button>
+            <button id="noBtn">NIE</button>
+        </div>
+    </div>
+
+    <!-- Krok 2: Wybór opcji -->
+    <div class="container hidden fade-in" id="step2">
+        <div class="hearts-bg">💖🎉🥰</div>
+        <h1>Jejuuu, super! 😍</h1>
+        <p>Wiedziałem, że się zgodzisz! Nikola, zarezerwuj czas <strong>21 czerwca</strong> i wybierz, co robimy:</p>
+        
+        <form id="dateForm">
+            <div class="options-container">
+                <label class="option-card">
+                    <input type="radio" name="dateOption" value="Trampoliny" required>
+                    <span>Szaleństwo w parku trampolin 🤸‍♂️</span>
+                </label>
+                
+                <label class="option-card">
+                    <input type="radio" name="dateOption" value="Ostromecko">
+                    <span>Romantyczny spacer do Ostromecka 🌲🏰</span>
+                </label>
+                
+                <label class="option-card">
+                    <input type="radio" name="dateOption" value="Trójmiasto">
+                    <span>Ekscytujący wyjazd do Trójmiasta 🌊🏙️</span>
+                </label>
+            </div>
+            <button type="submit" class="submit-btn">Zatwierdź wybór! ✨</button>
+        </form>
+    </div>
+
+    <!-- Krok 3: Ekran końcowy z komplementami i odliczaniem -->
+    <div class="container hidden fade-in" id="step3">
+        <div class="hearts-bg">🥂💝✨</div>
+        <h1>Idealnie, Nikola!</h1>
+        <p style="font-size: 1.1rem; margin: 10px 0;">Widzimy się <strong>21 czerwca</strong>!<br>Twój wybór to:<br><strong id="chosenPlace" style="color: #f472b6; font-size: 1.3rem;"></strong>!</p>
+        
+        <h2>Dziękuję w 20 językach:</h2>
+        <div class="words-grid">
+            <span>🇵🇱 Dziękuję</span> <span>🇬🇧 Thank you</span>
+            <span>🇩🇪 Danke</span> <span>🇫🇷 Merci</span>
+            <span>🇪🇸 Gracias</span> <span>🇮🇹 Grazie</span>
+            <span>🇵🇹 Obrigado</span> <span>🇳🇱 Dank je</span>
+            <span>🇺🇦 Дякую</span> <span>🇯🇵 Arigato</span>
+            <span>🇨🇳 XieXie</span> <span>🇰🇷 Gamsahabnida</span>
+            <span>🇬rz Efcharisto</span> <span>🇹🇷 Teşekkürler</span>
+            <span>🇸🇪 Tack</span> <span>🇳🇴 Takk</span>
+            <span>🇩🇰 Tak</span> <span>🇨🇿 Děkuji</span>
+            <span>🇭🇺 Köszönöm</span> <span>🇭🇷 Hvala</span>
+        </div>
+
+        <h2>Jesteś piękna jako... (30 synonimów)</h2>
+        <div class="words-grid">
+            <span>1. Cudowna</span> <span>16. Fascynująca</span>
+            <span>2. Śliczna</span> <span>17. Zjawiskowa</span>
+            <span>3. Olśniewająca</span> <span>18. Urocza</span>
+            <span>4. Zachwycająca</span> <span>19. Ponętna</span>
+            <span>5. Prześliczna</span> <span>20. Czarująca</span>
+            <span>6. Znamienita</span> <span>21. Atrakcyjna</span>
+            <span>7. Urokliwa</span> <span>22. Nieziemska</span>
+            <span>8. Zjawiskowa</span> <span>23. Magnetyczna</span>
+            <span>9. Przepiękna</span> <span>24. Niepowtarzalna</span>
+            <span>10. Boska</span> <span>25. Szykowna</span>
+            <span>11. Hipnotyzująca</span> <span>26. Wyjątkowa</span>
+            <span>12. Zmysłowa</span> <span>27. Kwitnąca</span>
+            <span>13. Śliczniutka</span> <span>28. Kusząca</span>
+            <span>14. Olśniewająca</span> <span>29. Zniewalająca</span>
+            <span>15. Ślicznooka</span> <span>30. Idealna ❤️</span>
+        </div>
+
+        <!-- Licznik czasu -->
+        <div class="countdown-container">
+            <p style="font-size: 0.9rem; font-weight: bold;">Czas do naszej randki:</p>
+            <div class="countdown-timer">
+                <div class="countdown-item"><span id="days">00</span><span class="countdown-label">Dni</span></div>
+                <div class="countdown-item"><span id="hours">00</span><span class="countdown-label">Godz</span></div>
+                <div class="countdown-item"><span id="minutes">00</span><span class="countdown-label">Min</span></div>
+                <div class="countdown-item"><span id="seconds">00</span><span class="countdown-label">Sek</span></div>
+            </div>
+        </div>
+
+        <p style="margin-top: 25px; font-weight: bold;">Zrób screena, podeślij mi go i dogrywamy szczegóły na żywo! 🚀🔥</p>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const dateForm = document.getElementById('dateForm');
+        const chosenPlace = document.getElementById('chosenPlace');
+
+        noBtn.style.right = '15%';
+
+        function moveNoButton(e) {
+            if (e) e.preventDefault();
+            const margin = 60;
+            const maxX = window.innerWidth - noBtn.offsetWidth - margin;
+            const maxY = window.innerHeight - noBtn.offsetHeight - margin;
+
+            const randomX = Math.max(margin, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(margin, Math.floor(Math.random() * maxY));
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', moveNoButton);
+        noBtn.addEventListener('click', (e) => e.preventDefault());
+
+        yesBtn.addEventListener('click', () => {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            startHeartRain();
+        });
+
+        dateForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const selectedOption = document.querySelector('input[name="dateOption"]:checked').value;
+            
+            let txt = "";
+            if(selectedOption === "Trampoliny") txt = "Szaleństwo w parku trampolin 🤸‍♂️";
+            if(selectedOption === "Ostromecko") txt = "Spacer do Ostromecka 🌲🏰";
+            if(selectedOption === "Trójmiasto") txt = "Wyjazd do Trójmiasta 🌊🏙️";
+
+            chosenPlace.innerText = txt;
+            step2.classList.add('hidden');
+            step3.classList.remove('hidden');
+            initCountdown();
+        });
+
+        function startHeartRain() {
+            const hearts = ['💜', '💖', '💝', '✨', '💕'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-fall');
+                heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 90 + 'vw';
+                heart.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+                heart.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+                
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 4500);
+            }, 400);
+        }
+
+        // Logika odliczania wstecznego
+        function initCountdown() {
+            // Ustawienie docelowego roku na najbliższy wolny 21 czerwca
+            const currentYear = new Date().getFullYear();
+            let targetDate = new Date(`June 21, ${currentYear} 17:00:00`).getTime();
+            
+            // Jeśli 21 czerwca w tym roku już minął, ustaw odliczanie na przyszły rok
+            if (new Date().getTime() > targetDate) {
+                targetDate = new Date(`June 21, ${currentYear + 1} 17:00:00`).getTime();
+            }
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const difference = targetDate - now;
+
+                if (difference < 0) {
+                    document.querySelector('.countdown-container').innerHTML = "<p style='color:#f472b6; font-weight:bold; margin-top:10px;'>To już dzisiaj! 😍🚀</p>";
+                    clearInterval(interval);
+                    return;
+                }
+
+                const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+                document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+                document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+                document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+            }
+
+            updateTimer();
+            const interval = setInterval(updateTimer, 1000);
+        }
+    </script>
+</body>
+</html>
